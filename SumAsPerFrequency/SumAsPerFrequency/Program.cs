@@ -6,12 +6,14 @@
         int arrSize = Convert.ToInt32(Console.ReadLine());
         string arrIntegers = Console.ReadLine();
         int[] arr = arrIntegers.Split(' ').Select(int.Parse).ToArray();
-        int queries = Convert.ToInt32(Console.ReadLine());
-        FrequencyPoint[] frequencies = new FrequencyPoint[queries];
-        for (int i = 0; i < queries; i++) {
+
+        int queriesString = Convert.ToInt32(Console.ReadLine());
+        FrequencyPoint[] queries = new FrequencyPoint[queriesString];
+        for (int i = 0; i < queriesString; i++) {
             int[] lines = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
-            frequencies[i] = new FrequencyPoint{ Start = lines[0], End = lines[1] };
+            queries[i] = new FrequencyPoint{ Start = lines[0], End = lines[1] };
         }
+
         Dictionary<int, int> occurances = new Dictionary<int, int>();
         for (int i = 0;i < arr.Length;i++)
         {
@@ -21,13 +23,14 @@
                 occurances.Add(arr[i], 1);
         }
 
-        for (int i = 0; i< frequencies.Length; i++)
+        for (int i = 0; i< queries.Length; i++)
         {
             int sum = 0;
-            foreach (var item in occurances)
+            var items = occurances.Where(o => o.Value >= queries[i].Start && o.Value <= queries[i].End).Select(s => s.Key * s.Value);
+
+            foreach (var item in items)
             {
-                if (item.Value >= frequencies[i].Start && item.Value <= frequencies[i].End)
-                    sum += item.Key * item.Value;
+                sum += item;
             }
             Console.WriteLine(sum);
         }
